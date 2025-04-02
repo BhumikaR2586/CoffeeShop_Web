@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center text-white d-flex align-items-center justify-content-center" style="background: url('https://source.unsplash.com/1600x900/?coffee') center/cover no-repeat; height: 60vh;">
+    <div class="container" style="background: #b2834d; padding: 20px; border-radius: 10px;">
+        <h1 class="display-3 fw-bold">Welcome to Feel Good Coffee</h1>
+        <p class="lead">Experience the finest coffee crafted with love.</p>
+        <a href="#menu" class="btn btn-lg btn-warning shadow-lg">Explore Menu</a>
+    </div>
+</section>
+
+<!-- Coffee Menu -->
+<div class="container py-5" id="menu">
+    <h2 class="text-center mb-4">Our Special Coffee Selection</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for app1 in coffee %}
+        <div class="col">
+            <div class="card h-100 shadow-lg border-0 hover-effect">
+                <img src="{{ app1.image }}" class="card-img-top" alt="{{ app1.name }}" style="height: 250px; object-fit: cover;">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">{{ app1.name }}</h5>
+                    <p class="card-text text-secondary">${{ app1.price }}</p>
+                    <a href="#" class="btn btn-dark">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .hover-effect {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-effect:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+{% endblock %}
