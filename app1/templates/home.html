@@ -21,7 +21,9 @@
                 <div class="card-body text-center">
                     <h5 class="card-title fw-bold">{{ app1.name }}</h5>
                     <p class="card-text text-secondary">${{ app1.price }}</p>
-                    <a href="#" class="btn btn-dark">Add to Cart</a>
+                    <a href="{% url 'add_to_cart' app1.id %}" class="btn btn-dark {% if app1.quantity <= 0 %}disabled{% endif %}">
+                        Add to Cart
+                    </a>
                 </div>
             </div>
         </div>
