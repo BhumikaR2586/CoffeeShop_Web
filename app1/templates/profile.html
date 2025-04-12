@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4 text-uppercase" style="font-weight: bold; color: #333;">Your Profile</h2>
+    <div class="card mx-auto shadow-lg" style="max-width: 600px; border-radius: 15px; overflow: hidden;">
+        <div class="card-header bg-gradient text-white text-center" style="background: linear-gradient(45deg, #007bff, #0056b3);">
+            <h4 style="font-weight: bold;">{{ user.username }}</h4>
+        </div>
+        <div class="card-body" style="background-color: #f9f9f9;">
+            <div class="mb-3">
+                <p class="card-text">
+                    <strong>Email:</strong> <span style="color: #555;">{{ user.email }}</span>
+                </p>
+            </div>
+            <div class="mb-3">
+                <p class="card-text">
+                    <strong>Address:</strong> <span style="color: #555;">{{ user_profile.address }}</span>
+                </p>
+            </div>
+        </div>
+        <div class="card-footer text-center" style="background-color: #f1f1f1;">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary me-2" style="border-radius: 20px;">Back to Home</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger" style="border-radius: 20px;">Logout</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

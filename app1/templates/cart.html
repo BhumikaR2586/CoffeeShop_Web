@@ -23,7 +23,7 @@
                             <span>{{ item.coffee.name }}</span>
                         </div>
                     </td>
-                    <td>${{ item.coffee.price }}</td>
+                    <td>₹{{ item.coffee.price }}</td>
                     <td>
                         <div class="d-flex align-items-center">
                             <a href="{% url 'decrement_quantity' item.id %}" class="btn btn-sm btn-outline-secondary me-1">-</a>
@@ -31,14 +31,14 @@
                             <a href="{% url 'increment_quantity' item.id %}" class="btn btn-sm btn-outline-secondary">+</a>
                         </div>
                     </td>
-                    <td>${{ item.subtotal|floatformat:2 }}</td>
+                    <td>₹{{ item.subtotal|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     <div class="d-flex justify-content-between align-items-center mt-4">
-        <h3>Total: ${{ total }}</h3>
+        <h3>Total: ₹{{ total }}</h3>
         <a href="#" class="btn btn-success btn-lg">Checkout</a>
     </div>
     {% else %}
