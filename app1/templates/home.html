@@ -2,16 +2,17 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section text-center text-white d-flex align-items-center justify-content-center" style="background: url('https://source.unsplash.com/1600x900/?coffee') center/cover no-repeat; height: 60vh;">
-    <div class="container" style="background: #b2834d; padding: 20px; border-radius: 10px;">
-        <h1 class="display-3 fw-bold">Welcome to Feel Good Coffee</h1>
-        <p class="lead">Experience the finest coffee crafted with love.</p>
+<section class="hero-section text-center text-white d-flex align-items-center justify-content-center"
+         style="background: url('https://source.unsplash.com/1600x900/?coffee') center/cover no-repeat; height: 50vh; margin-top: -30px;">
+    <div class="container" style="background: #b2834d; padding: 20px 40px; border-radius: 10px;">
+        <h1 class="display-4 fw-bold mb-3">Welcome to Feel Good Coffee</h1>
+        <p class="lead mb-4">Experience the finest coffee crafted with love.</p>
         <a href="#menu" class="btn btn-lg btn-warning shadow-lg">Explore Menu</a>
     </div>
 </section>
 
 <!-- Coffee Menu -->
-<div class="container py-5" id="menu">
+<div class="container" id="menu" style="padding-top: 0.001rem;">
     <h2 class="text-center mb-4">Our Special Coffee Selection</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for app1 in coffee %}
