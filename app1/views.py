@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Coffee, Cart
+from .models import Coffee, Cart, Order
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import UserProfile
+from django.contrib.auth.decorators import login_required
+
 
 def home(request):
     app1 = Coffee.objects.all()
@@ -42,11 +44,17 @@ def add_to_cart(request, coffee_id):
 
 def view_cart(request):
     if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to login if the user is not authenticated
+        return redirect('login')
 
-    cart_items = Cart.objects.filter(user=request.user)  # Filter cart items by user
-    total = sum(item.coffee.price * item.quantity for item in cart_items)
+    cart_items = Cart.objects.filter(user=request.user)
+    total = 0
+
+    for item in cart_items:
+        item.subtotal = item.coffee.price * item.quantity
+        total += item.subtotal
+
     return render(request, 'cart.html', {'cart_items': cart_items, 'total': total})
+
 
 def increment_quantity(request, cart_id):
     cart_item = get_object_or_404(Cart, id=cart_id, user=request.user)  # Ensure the cart item belongs to the user
@@ -132,3 +140,63 @@ def user_profile(request):
     
     user_profile = UserProfile.objects.get(user=request.user)
     return render(request, 'profile.html', {'user_profile': user_profile})
+
+@login_required
+def checkout(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    if not cart_items:
+        messages.error(request, "Your cart is empty!")
+        return redirect('home')
+
+    total = sum(item.coffee.price * item.quantity for item in cart_items)
+
+    # Create the order
+    order = Order.objects.create(
+        user=request.user,
+        total=total,
+        status='pending',
+        address=request.user.userprofile.address  # Assuming address is in UserProfile
+    )
+
+    # Add cart items to the order (Many-to-Many relationship)
+    order.cart_items.set(cart_items)
+
+    # Create order_items data for the template (detailed bill)
+    order_items = []
+    for item in cart_items:
+        order_items.append({
+            'coffee': item.coffee,
+            'quantity': item.quantity,
+            'total_price': item.coffee.price * item.quantity
+        })
+
+    # Reduce coffee stock and delete cart items after the order is created
+    for item in cart_items:
+        item.coffee.quantity -= item.quantity
+        item.coffee.save()
+
+    cart_items.delete()
+
+    return render(request, 'checkout_confirmation.html', {'order': order, 'order_items': order_items})
+
+@login_required
+def edit_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == "POST":
+        email = request.POST['email']
+        address = request.POST['address']
+
+        # Update fields
+        request.user.email = email
+        request.user.save()
+        user_profile.address = address
+        user_profile.save()
+
+        messages.success(request, "Profile updated successfully.")
+        return redirect('profile')  # Go back to the profile page
+
+    return render(request, 'edit_profile.html', {
+        'user': request.user,
+        'user_profile': user_profile
+    })
